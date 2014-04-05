@@ -114,7 +114,7 @@ public:
       PrintUserTime("Best Hypothesis Generation Time:");
     }
 
-    if (!staticData.GetAlignmentOutputFile().empty()) {
+    if (!staticData.GetAlignmentOutputFile().empty() && staticData.GetAlignmentOutputFile() != ":STDOUT:") {
       m_ioWrapper.OutputAlignment(translationId, bestHypo);
     }
 

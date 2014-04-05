@@ -170,7 +170,15 @@ public:
             staticData.GetOutputFactorOrder(),
             staticData.GetReportSegmentation(),
             staticData.GetReportAllFactors());
-          OutputAlignment(m_alignmentInfoCollector, m_lineNumber, bestHypo);
+          if (! staticData.GetAlignmentOutputFile().empty() && staticData.GetAlignmentOutputFile() == ":STDOUT:") { //added by Jie for inline alignment
+        	  if (! staticData.GetReportSegmentation()) { //ignore when report segmentation
+        		  ostringstream alignOut;
+        		  OutputAlignment(alignOut, bestHypo);
+        		  out << "| "<<alignOut.str()<<"|";
+        	  }
+          } else {
+        	  OutputAlignment(m_alignmentInfoCollector, m_lineNumber, bestHypo);
+          }
           IFVERBOSE(1) {
             debug << "BEST TRANSLATION: " << *bestHypo << endl;
           }
@@ -493,7 +501,7 @@ int main(int argc, char** argv)
   
     // initialize stram for word alignment between input and output
     auto_ptr<OutputCollector> alignmentInfoCollector;
-    if (!staticData.GetAlignmentOutputFile().empty()) {
+    if (!staticData.GetAlignmentOutputFile().empty() && staticData.GetAlignmentOutputFile() != ":STDOUT:") { //by Jie for stdout alignment
       alignmentInfoCollector.reset(new OutputCollector(ioWrapper->GetAlignmentOutputStream()));
     }
 

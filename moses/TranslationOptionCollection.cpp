@@ -211,8 +211,6 @@ void TranslationOptionCollection::ProcessOneUnknownWord(const Word &sourceWord,s
 	bool isEpsilon = (s=="" || s==EPSILON);
 	if (StaticData::Instance().GetDropUnknown())
 	{
-
-
 		isDigit = s.find_first_of("0123456789");
 		if (isDigit == 1) 
 			isDigit = 1;
@@ -222,7 +220,10 @@ void TranslationOptionCollection::ProcessOneUnknownWord(const Word &sourceWord,s
 	}
 	
 	Phrase* m_unksrc = new Phrase(1);
-  m_unksrc->AddWord() = sourceWord;
+	m_unksrc->AddWord() = sourceWord;
+	Word &newWord = m_unksrc->GetWord(0);
+    newWord.SetIsOOV(true);
+
 	m_unksrcs.push_back(m_unksrc);
 
 	TranslationOption *transOpt;
@@ -239,6 +240,7 @@ void TranslationOptionCollection::ProcessOneUnknownWord(const Word &sourceWord,s
 		// add to dictionary
 
 		Word &targetWord = targetPhrase.AddWord();
+		targetWord.SetIsOOV(true); //mark as oov, but not using the pos info, which only serve the chat decoder
 					
 		for (unsigned int currFactor = 0 ; currFactor < MAX_NUM_FACTORS ; currFactor++)
 		{

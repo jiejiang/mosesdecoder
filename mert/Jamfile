@@ -58,11 +58,13 @@ exe evaluator : evaluator.cpp mert_lib ;
 
 exe sentence-bleu : sentence-bleu.cpp mert_lib ;
 
+exe sentence-bleu-select : sentence-blue-select.cpp mert_lib ;
+
 exe pro : pro.cpp mert_lib ..//boost_program_options ;
 
 exe kbmira : kbmira.cpp mert_lib ..//boost_program_options ;
 
-alias programs : mert extractor evaluator pro kbmira sentence-bleu ;
+alias programs : mert extractor evaluator pro kbmira sentence-bleu sentence-bleu-select ;
 
 unit-test bleu_scorer_test : BleuScorerTest.cpp mert_lib ..//boost_unit_test_framework ;
 unit-test feature_data_test : FeatureDataTest.cpp mert_lib ..//boost_unit_test_framework ;

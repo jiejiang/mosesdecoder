@@ -142,6 +142,7 @@ void ChartManager::AddXmlChartOptions() {
     const WordsRange &range = opt->GetSourceWordsRange();
     RuleCubeItem* item = new RuleCubeItem( *opt, m_hypoStackColl );
     ChartHypothesis* hypo = new ChartHypothesis(*opt, *item, *this);
+    hypo->SetFromXML(true);
     hypo->CalcScore();
     ChartCell &cell = m_hypoStackColl.Get(range);
     cell.AddHypothesis(hypo);

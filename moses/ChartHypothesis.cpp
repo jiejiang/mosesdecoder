@@ -56,6 +56,7 @@ ChartHypothesis::ChartHypothesis(const ChartTranslationOptions &transOpt,
   ,m_winningHypo(NULL)
   ,m_manager(manager)
   ,m_id(manager.GetNextHypoId())
+  ,m_fromXML(false)
 {
   // underlying hypotheses for sub-spans
   const std::vector<HypothesisDimension> &childEntries = item.GetHypothesisDimensions();

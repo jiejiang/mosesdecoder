@@ -32,8 +32,10 @@ rule shell_or_die ( cmd ) {
 
 if $(build-moses-server) = true
 {
-  xmlrpc-linkflags = [ shell_or_die "$(xmlrpc-command) c++2 abyss-server --libs" ] ;
+  xmlrpc-linkflags = " -L/usr/local/lib -Wl,-Bstatic -lxmlrpc_server_abyss++ -lxmlrpc_server++ -lxmlrpc_server_abyss -lxmlrpc_server -lxmlrpc_abyss -lxmlrpc_xmlparse -lxmlrpc_xmltok -lxmlrpc++ -Wl,-Bdynamic -lpthread -lxmlrpc -lxmlrpc_util " ;
+  #xmlrpc-linkflags = [ shell_or_die "$(xmlrpc-command) c++2 abyss-server --libs" ] ;
   xmlrpc-cxxflags = [ shell_or_die "$(xmlrpc-command) c++2 abyss-server --cflags" ] ;
+  xmlrpc-linkflags += " -Wl,--as-needed " ;
 
   exe mosesserver : mosesserver.cpp ../../moses//moses ../../OnDiskPt//OnDiskPt : <linkflags>$(xmlrpc-linkflags) <cxxflags>$(xmlrpc-cxxflags) ;
 } else {

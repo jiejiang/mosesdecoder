@@ -57,7 +57,6 @@ scripts/training/phrase-extract/relax-parse
 scripts/training/phrase-extract/score
 scripts/training/phrase-extract/statistics
 scripts/training/symal/symal
-scripts/training/train-model.perl
 dist
 bin
 previous.sh
@@ -65,3 +64,8 @@ contrib/other-builds/*.xcodeproj/project.xcworkspace/
 contrib/other-builds/*.xcodeproj/xcuserdata/
 */*.xcodeproj/project.xcworkspace
 */*.xcodeproj/xcuserdata
+.cproject
+.project
+build.sh
+mert/sentence-bleu
+mert/sentence-bleu-select

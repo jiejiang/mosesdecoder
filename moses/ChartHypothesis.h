@@ -67,6 +67,8 @@ protected:
 
   unsigned m_id; /* pkoehn wants to log the order in which hypotheses were generated */
 
+  bool m_fromXML;
+
   //! not implemented
   ChartHypothesis(); 
   
@@ -95,6 +97,9 @@ public:
                   ChartManager &manager);
 
   ~ChartHypothesis();
+
+  bool IsFromXML() const { return m_fromXML; }
+  void SetFromXML(const bool &fromXML) { m_fromXML = fromXML; }
 
   unsigned GetId() const { return m_id; }
 

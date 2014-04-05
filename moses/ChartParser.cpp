@@ -26,6 +26,8 @@
 #include "StaticData.h"
 #include "TreeInput.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace Moses;
 
@@ -60,6 +62,9 @@ void ChartParserUnknown::Process(const Word &sourceWord, const WordsRange &range
   
   Phrase* unksrc = new Phrase(1);
   unksrc->AddWord() = sourceWord;
+  Word &newWord = unksrc->GetWord(0);
+  newWord.SetIsOOV(true);
+
   m_unksrcs.push_back(unksrc);
   
   //TranslationOption *transOpt;
@@ -82,6 +87,10 @@ void ChartParserUnknown::Process(const Word &sourceWord, const WordsRange &range
       TargetPhrase *targetPhrase = new TargetPhrase();
       Word &targetWord = targetPhrase->AddWord();
       targetWord.CreateUnknownWord(sourceWord);
+      //add by jie to set the oov properties
+      targetWord.SetIsOOV(true);
+      CHECK(range.GetStartPos() == range.GetEndPos());
+      targetWord.SetOOVSourcePos(range.GetStartPos());
       
       // scores
       vector<float> unknownScore(1, FloorScore(TransformScore(prob)));

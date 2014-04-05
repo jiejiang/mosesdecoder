@@ -168,7 +168,7 @@ void IOWrapper::Initialization(const std::vector<FactorType>	&/*inputFactorOrder
   }
 
   // sentence alignment output
-  if (! staticData.GetAlignmentOutputFile().empty()) {
+  if (! staticData.GetAlignmentOutputFile().empty() && staticData.GetAlignmentOutputFile() != ":STDOUT:") { //by Jie for stdout alignment
     m_alignmentOutputStream = new ofstream(staticData.GetAlignmentOutputFile().c_str());
     CHECK(m_alignmentOutputStream->good());
   }
@@ -205,6 +205,12 @@ void OutputSurface(std::ostream &out, const Hypothesis &edge, const std::vector<
       const Factor *factor = phrase.GetFactor(pos, outputFactorOrder[0]);
       out << *factor;
       CHECK(factor);
+
+      //check oov
+//      const Word &word = phrase.GetWord(pos);
+//      if (word.IsOOV()) {
+//    	  cout << "OOV: "<<word<<endl;
+//      }
 
       for (size_t i = 1 ; i < outputFactorOrder.size() ; i++) {
         const Factor *factor = phrase.GetFactor(pos, outputFactorOrder[i]);
@@ -290,6 +296,29 @@ void OutputAlignment(OutputCollector* collector, size_t lineNo , const TrellisPa
     OutputAlignment(collector,lineNo, path.GetEdges());
   }
 }
+
+void OutputAlignment(ostream &out, const Hypothesis * hypo) //added by Jie for inline alignment
+{
+    std::vector<const Hypothesis *> edges;
+    const Hypothesis *currentHypo = hypo;
+    while (currentHypo) {
+      edges.push_back(currentHypo);
+      currentHypo = currentHypo->GetPrevHypo();
+    }
+
+    size_t targetOffset = 0;
+
+    for (int currEdge = (int)edges.size() - 1 ; currEdge >= 0 ; currEdge--) {
+      const Hypothesis &edge = *edges[currEdge];
+      const TargetPhrase &tp = edge.GetCurrTargetPhrase();
+      size_t sourceOffset = edge.GetCurrSourceWordsRange().GetStartPos();
+
+      OutputAlignment(out, tp.GetAlignTerm(), sourceOffset, targetOffset);
+
+      targetOffset += tp.GetSize();
+    }
+}
+
 
 void OutputBestHypo(const Moses::TrellisPath &path, long /*translationId*/, bool reportSegmentation, bool reportAllFactors, std::ostream &out)
 {

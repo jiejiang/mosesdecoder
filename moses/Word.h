@@ -52,11 +52,14 @@ protected:
 
   FactorArray m_factorArray; /**< set of factors */
   bool m_isNonTerminal;
+  bool m_isOOV;
+  size_t m_OOVSourcePos; //used when OOV is true, set to 0 in default, only valid when m_isOOV set to true
 
 public:
   /** deep copy */
   Word(const Word &copy)
-    :m_isNonTerminal(copy.m_isNonTerminal) {
+    :m_isNonTerminal(copy.m_isNonTerminal)
+  	,m_isOOV(copy.m_isOOV),m_OOVSourcePos(0) {
     std::memcpy(m_factorArray, copy.m_factorArray, sizeof(FactorArray));
   }
 
@@ -64,6 +67,8 @@ public:
   explicit Word(bool isNonTerminal = false) {
     std::memset(m_factorArray, 0, sizeof(FactorArray));
     m_isNonTerminal = isNonTerminal;
+    m_isOOV = false;
+    m_OOVSourcePos = 0;
   }
 
   ~Word() {}
@@ -90,6 +95,19 @@ public:
   }
   inline void SetIsNonTerminal(bool val) {
     m_isNonTerminal = val;
+  }
+
+  inline bool IsOOV() const {
+    return m_isOOV;
+  }
+  inline void SetIsOOV(bool val) {
+    m_isOOV = val;
+  }
+  inline void SetOOVSourcePos(size_t pos) {
+	  m_OOVSourcePos = pos;
+  }
+  inline size_t GetOOVSourcePos() const {
+	  return m_OOVSourcePos;
   }
 
   /** add the factors from sourceWord into this representation,
